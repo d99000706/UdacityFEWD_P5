@@ -4,6 +4,10 @@
     by Chris Howard May 2015
 */
 
+/*
+
+    syles moved to inlined to try to improve pagespeed score
+    
 html, body {
     height: 100%;
     margin: 0px;
@@ -42,8 +46,8 @@ html, body {
 }
 
 #linksDivId {
-    /*max-height: 40%;
-    */
     overflow: auto;
 }
+
+*/
 

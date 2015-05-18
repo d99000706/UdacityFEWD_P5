@@ -12,14 +12,61 @@
         <meta name="viewport" content="width=device-width">
         <meta charset="UTF-8">
         <title>Neighborhood Map</title>
-        <link rel="stylesheet" href="css/style.css">
         
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <!--
+            inlined css styles for improved performance
+        <link rel="stylesheet" href="css/style.css">
+        -->
+        
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                font-family: 'Trebuchet MS';
+                font-size: 14px;
+            }
 
+            #formBtnId {
+                position: fixed; 
+                z-index:903; 
+                left: 0; 
+                top: 0;
+            }
+
+            #formDivId {
+                height: 100%;
+                width: 0%;
+                float:left;
+                background-color: rgb(242, 242, 218);
+            }
+
+            #mapDivId {
+                height: 100%;
+                width: 100%;
+                float:right;
+            }
+
+            #listDivId {
+                max-height: 40%;
+                overflow: auto;
+            }
+
+            #filterDivId {
+                max-height: 20%;
+            }
+
+            #linksDivId {
+                overflow: auto;
+            }        
+        </style>
+        
         <script async src="js/libs/jquery.min.js"></script>
         <script async src="js/libs/knockout-3.3.0.js"></script>
 
         <script async type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
     </head>
     <body >
         <!--
