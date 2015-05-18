@@ -248,7 +248,7 @@ var mapAppVM = {
                 return function( data ) {
                     // check for error condition - no links in data 
                     for (var i = 0; i < Math.min(self.maxNumLinks, data.items.length); i++) {
-                        console.log(data.items[i].link);
+                        // console.log(data.items[i].link);
                         
                         locationData[locIndex].linksList[i] = data.items[i].link;
                         
