@@ -1,0 +1,49 @@
+/*
+    style.css
+    css style sheet for the Neighborhood Map project
+    by Chris Howard May 2015
+*/
+
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Trebuchet MS';
+    font-size: 14px;
+}
+
+#formBtnId {
+    position: fixed; 
+    z-index:903; 
+    left: 0; 
+    top: 0;
+}
+
+#formDivId {
+    height: 100%;
+    width: 0%;
+    float:left;
+    background-color: rgb(242, 242, 218);
+}
+
+#mapDivId {
+    height: 100%;
+    width: 100%;
+    float:right;
+}
+
+#listDivId {
+    max-height: 40%;
+    overflow: auto;
+}
+
+#filterDivId {
+    max-height: 20%;
+}
+
+#linksDivId {
+    /*max-height: 40%;
+    */
+    overflow: auto;
+}
+

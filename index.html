@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+    main page for Neighborhood Map project
+    by Chris Howard May 2015
+-->
+<html lang="en">
+    <head>
+        <!--
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        -->
+        
+        <meta name="viewport" content="width=device-width">
+        <meta charset="UTF-8">
+        <title>Neighborhood Map</title>
+        <link rel="stylesheet" href="css/style.css">
+        
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+        <script src="js/libs/jquery.min.js"></script>
+        <script src="js/libs/knockout-3.3.0.js"></script>
+
+    </head>
+    <body >
+        <!--
+            hamburger icon used as toggle button for the form view
+        -->
+        <div id='formBtnId'>
+            <p data-bind='click: formToggleClickCB'>&#9776;
+            </p>
+        </div>
+        <!--
+            div section for the form view
+        -->
+        <div id="formDivId" data-bind="style:{ width: formWd()+'%'}">
+            <div id='listDivId'>
+                <br>
+                <ul data-bind="foreach: locationList">
+                    <li data-bind="click: $parent.locClickCB, text: $data.name, style:{color: $index() == $parent.selectedIndex() ? 'blue' : 'black', display: $data.visible() ? 'list-item' : 'none'}">
+                    </li>
+                </ul>
+            </div>
+            <div id='filterDivId'>
+                <input type = 'text' id='filterTxtId'> 
+                <button data-bind='click: filterClickCB'>Filter</button>
+                <button data-bind='click: resetClickCB'>Reset</button>
+            </div>
+            <div id='linksDivId'>
+                <p> related links: </p>
+                <ul id='linksListId' data-bind='foreach: linksList'>
+                    <li >
+                        <a data-bind='text: $data, attr:{href: $data, target: "_blank"}'>
+                        </a>
+                    </li>
+                </ul>
+                <p data-bind="style:{ display: ((linksList().length == 0) && (selectedIndex() >= 0)) ? 'inline' : 'none'} "> no additional links found  </p>
+               
+            </div>
+        </div>
+        <!--
+            div section for the map view
+        -->
+        <div id="mapDivId" data-bind="style:{ width: (100 - formWd())+'%'}">
+        </div>
+
+
+        <script type="text/javascript" src="js/app.js"></script>
+
+    </body>
+    
+        
+</html>

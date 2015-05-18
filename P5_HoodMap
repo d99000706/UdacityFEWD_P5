@@ -1,0 +1,14 @@
+<NotepadPlus>
+    <Project name="P5_HoodMap">
+        <Folder name="css">
+            <File name="css\style.css" />
+        </Folder>
+        <Folder name="js">
+            <Folder name="libs">
+                <File name="js\libs\jquery.min.js" />
+            </Folder>
+            <File name="js\app.js" />
+        </Folder>
+        <File name="index.html" />
+    </Project>
+</NotepadPlus>
