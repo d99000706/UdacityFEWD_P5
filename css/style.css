@@ -3,51 +3,72 @@
     css style sheet for the Neighborhood Map project
     by Chris Howard May 2015
 */
-
-/*
-
-    syles moved to inlined to try to improve pagespeed score
-    
-html, body {
+  
+html, 
+body {
     height: 100%;
-    margin: 0px;
-    padding: 0px;
-    font-family: 'Trebuchet MS';
+    margin: 0;
+    padding: 0;
+}
+
+.page-font {
+    font-family: 'Verdana';
     font-size: 14px;
 }
 
-#formBtnId {
+@media screen and (max-width: 600px) {
+    .page-font {
+        font-size: 15px;
+    }
+}
+
+.pad-right {
+  padding-right: 1%;
+}
+
+.form-btn {
     position: fixed; 
-    z-index:903; 
+    z-index:4; 
     left: 0; 
     top: 0;
 }
 
-#formDivId {
+.form-div {
+    position: absolute; 
     height: 100%;
-    width: 0%;
     float:left;
-    background-color: rgb(242, 242, 218);
+    background-color: rgba(42, 22, 255, 0.1);
+    z-index:-1;
+    -webkit-transition: background-color 1.0s ease-in-out;
+    -moz-transition:    background-color 1.0s ease-in-out;
+    -ms-transition:     background-color 1.0s ease-in-out;
+    -o-transition:      background-color 1.0s ease-in-out;
+    transition:         background-color 1.0s ease-in-out;   
+}
+@media screen and (min-width: 600px) {
+    .form-div{
+        max-width: 40%;
+    }
+}
+.form-div.open {
+    background-color: rgba(242, 242, 218, 0.8);
 }
 
-#mapDivId {
+.map-div {
     height: 100%;
     width: 100%;
     float:right;
 }
 
-#listDivId {
+.list-div {
     max-height: 40%;
     overflow: auto;
 }
 
-#filterDivId {
+.filter-div {
     max-height: 20%;
 }
 
-#linksDivId {
+.links-div {
     overflow: auto;
 }
-
-*/
-

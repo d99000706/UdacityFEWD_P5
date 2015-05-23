@@ -6,6 +6,8 @@
 // view2: form of controls for hiding, showing, filtering locations shown
 // viewmodel: uses knockoutjs MVVm model to connect model & views
 
+"use strict";
+
 // model data
 // in addition to the typical name, address, etc.
 // each location will have a list of links generated from a google search api request
@@ -17,7 +19,7 @@ var locationData = [
         state: "GA",
         zip: "30004",
         url: "http://www.nahmthaicuisine.com/#_=_",
-        linksList: [],
+        linksList: []
     },
     {
         name: "La Parrilla Mexican Restaurant",
@@ -26,7 +28,7 @@ var locationData = [
         state: "GA",
         zip: "30004",
         url: "http://laparrilla.com/",
-        linksList: [],
+        linksList: []
     },
     {
         name: "Mambo's Cafe",
@@ -35,7 +37,7 @@ var locationData = [
         state: "GA",
         zip: "30004",
         url: "http://mambos-cafe.com/#/",
-        linksList: [],
+        linksList: []
     },
     {
         name: "Smokejack",
@@ -44,7 +46,7 @@ var locationData = [
         state: "GA",
         zip: "30009",
         url: "http://smokejackbbq.com/#_=_",
-        linksList: [],
+        linksList: []
     },
     {
         name: "Sage Woodfire Tavern",
@@ -53,7 +55,7 @@ var locationData = [
         state: "GA",
         zip: "30009",
         url: "http://www.restaurantalpharetta-ga.com/",
-        linksList: [],
+        linksList: []
     },
     {
         name: "Village Tavern",
@@ -62,7 +64,7 @@ var locationData = [
         state: "GA",
         zip: "30009",
         url: "http://www.villagetavern.com/",
-        linksList: [],
+        linksList: []
     },
     {
         name: "Pure Taqueria",
@@ -71,8 +73,8 @@ var locationData = [
         state: "GA",
         zip: "30009",
         url: "http://puretaqueria.com/",
-        linksList: [],
-    },
+        linksList: []
+    }
 ];
 
 
@@ -90,7 +92,7 @@ var mapView = {
        
         //console.log(document.getElementById(divId));
        
-        this.map = new google.maps.Map(document.getElementById(divId), mapOptions);   
+        this.map = new google.maps.Map(document.getElementsByClassName(divId)[0], mapOptions);   
         
         this.service = new google.maps.places.PlacesService(this.map);
         
@@ -115,10 +117,6 @@ var mapView = {
                 return function(results, status) {
                     if (status == google.maps.places.PlacesServiceStatus.OK) {
                     
-                        var lat  = results[0].geometry.location.lat();  // latitude from the place service
-                        var lon  = results[0].geometry.location.lng();  // longitude from the place service
-                        var name = results[0].formatted_address;  
-                        
                         self.mapBounds.extend(results[0].geometry.location);
                     
                         self.map.fitBounds(self.mapBounds);
@@ -145,11 +143,8 @@ var mapView = {
                         });
                     }
                 };
-            })(i, this));
-            
-            
+            })(i, this));           
         }
-    
     },
 
     //change the selected marker        
@@ -185,7 +180,6 @@ var mapView = {
         this.map.setCenter(this.mapBounds.getCenter());
         mapView.map.fitBounds(mapView.mapBounds);
     },   
-
 };
 
 
@@ -197,18 +191,11 @@ var mapAppVM = {
     // maximum number of links to retain & show the user from the google search request
     maxNumLinks: 6,
     
-    // hidden form opens with the hamburger icon
-    // open form will have the following % width and map will have the rest
-    // closed form will have 0% width
-    formOpenWd: 33.33,
-    
-    
     init: function() {
         var self = this;
         
-        // observables to tell us whether the form is open and its css style width in %
-        this.isFormOpen = ko.observable(false);
-        this.formWd = ko.observable(0);
+        // observables to tell us whether the form is open
+        this.isFormOpen = ko.observable(false);        
         
         // a list of locations to choose from
         this.locationList = ko.observableArray();
@@ -221,45 +208,14 @@ var mapAppVM = {
         // -1 means no location selected yet
         this.selectedIndex = ko.observable(-1);
         
+        //  create an observable error message for the results of the google api query
+        this.queryErrorMsg = ko.observable("");
+
 
         // add in the location list items to the observable array
         for (var locIndex=0; locIndex < locationData.length; locIndex++) {
             // add an index to each location object for easy identification
-            locationData[locIndex].index = locIndex;
-            
-            // use google search api to get additional links on each location
-            // error handling will be done as follows:
-            // assume the request/query does not produce results so that each location has an empty list of links
-            // as the ajax reqests come in, we will fill this list up to maxNumLinks
-            // in the html, there is an error message that will be hidden or shown based on whether the links list is empty or not
-            var url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyB53pwMA4aj0FAh1Yho1-ehtanOcu84hG0&cx=017290458089839839299:ggwygvbjdlo&q=";
-            
-            // bad url below to test for error handling
-            //var url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyB53pwMA4aj0FAh1Yho1-ehtanOcu84hG0&cx=017290458089839299:ggwygvbjdlo&q=";
-            
-            url = url + locationData[locIndex].name + " " + 
-                        locationData[locIndex].stAddr + " " + 
-                        locationData[locIndex].city + " " + 
-                        locationData[locIndex].state + " " + 
-                        locationData[locIndex].zip;
-            
-            // use an iffe to capture the location index            
-            $.getJSON( url, (function(locIndex, self) {
-                return function( data ) {
-                    // check for error condition - no links in data 
-                    for (var i = 0; i < Math.min(self.maxNumLinks, data.items.length); i++) {
-                        // console.log(data.items[i].link);
-                        
-                        locationData[locIndex].linksList[i] = data.items[i].link;
-                        
-                        
-                    }
-                    
-                    // code to test error handling - will fill in a location with an empty list of links as if an ajax request failed
-                    // locationData[2].linksList = [];
-                    
-                };
-            })(locIndex, this));
+            locationData[locIndex].index = locIndex;            
             
             this.locationList.push(locationData[locIndex]);            
             
@@ -274,25 +230,30 @@ var mapAppVM = {
             if (newValue >= 0) {
                 self.linksList(self.locationList()[newValue].linksList);
             }
-            else {
+            else 
+            {
                 // -1 index means no location selected
                 self.linksList([]);
             }
         
             // change the selected map marker
             mapView.changeSelectedLocation(newValue);
-            
         });
 
         // hamburger icon will toggle the form
+        self.form = document.getElementsByClassName('form-div')[0];
         this.formToggleClickCB = function() {
+        
             if (self.isFormOpen() ) {
-                self.isFormOpen(false)
-                self.formWd(0);
+                self.form.style.zIndex = -1;
+                self.form.classList.remove('open');   
+                self.isFormOpen(false);
             }
-            else {
-                self.isFormOpen(true)
-                self.formWd(self.formOpenWd);
+            else 
+            {
+                self.form.style.zIndex = 1;
+                self.form.classList.add('open');
+                self.isFormOpen(true);
             }
 
             // Make sure the map bounds get updated on map view resize
@@ -303,13 +264,7 @@ var mapAppVM = {
         // the user selected location index will change or toggle
         this.locClickCB = function() {
             // in this callback, "this" will be a location object
-            // if the new location is already selected then toggle it
-            if (this.index == self.selectedIndex()) {
-                self.selectedIndex(-1);
-            }
-            else {
-                self.selectedIndex(this.index);
-            }        
+            self.changeSelectedIndex(this.index);
         };
         
         // the filter button will invoke this callback and show/hide certain locations
@@ -335,7 +290,7 @@ var mapAppVM = {
                 this.locationList()[locIndex].visible(visible);
                 
                 // if current selection is filtered out then change selected index to -1
-                if (visible == false && locIndex == this.selectedIndex()) {
+                if (!visible && locIndex == this.selectedIndex()) {
                     this.selectedIndex(-1);
                 }
 
@@ -356,13 +311,86 @@ var mapAppVM = {
             self.filterClickCB();
         };
 
+        // change the user selected index
+        this.changeSelectedIndex = function(newIndex) {
+        
+            // check to see if we need to run a google search query to get additional links for this location
+            // they may already have been found and saved            
+            if (newIndex >= 0 && locationData[newIndex].linksList.length === 0) {
+            
+                // use google search api to get additional links on this location
+                // error handling will be done as follows:
+                // assume the request/query does not produce results so that each location has an empty list of links
+                // as the ajax requests come in, we will fill this list up to maxNumLinks
+                // in the html, there is an error message that will be hidden or shown based on whether the links list is empty or not
+                var url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyB53pwMA4aj0FAh1Yho1-ehtanOcu84hG0&cx=017290458089839839299:ggwygvbjdlo&q=";
+                
+                // bad url below to test for error handling
+                //var url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyB53pwMA4aj0FAh1Yho1-ehtanOcu84hG0&cx=017290458089839299:ggwygvbjdlo&q=";
+                
+                url = url + locationData[newIndex].name + " " + 
+                            locationData[newIndex].stAddr + " " + 
+                            locationData[newIndex].city + " " + 
+                            locationData[newIndex].state + " " + 
+                            locationData[newIndex].zip;
+                
+                // use an iffe to capture the location index            
+                $.getJSON( url, (function(locIndex, self) {
+                    return function( data ) {
+                        // check for error condition - no links in data 
+                        for (var i = 0; i < Math.min(self.maxNumLinks, data.items.length); i++) {
+                            // console.log(data.items[i].link);
+                            
+                            locationData[locIndex].linksList[i] = data.items[i].link;
+                            
+                        }
+                        
+                        // since this is an asynchronous call, we may need to update the linksList observable
+                        if (self.selectedIndex() == locIndex) {
+                            self.linksList(locationData[locIndex].linksList);
+                        }
+                        
+                    };
+                })(newIndex, this))
+                .error( (function(locIndex, self) {
+                    return function( data ) {
+                        for (var i = 0; i < self.maxNumLinks; i++) {
+                            //console.log(data);
+                            
+                            //locationData[locIndex].linksList[i] = locIndex + ", " + i;
+                            self.queryErrorMsg("no additional links found");
+                        }
+                        // since this is an asynchronous call, we may need to update the linksList observable
+                        if (self.selectedIndex() == locIndex) {
+                            self.linksList(locationData[locIndex].linksList);
+                        }
+                    
+                    };
+                })(newIndex, this));
+            }
+
+        
+            // if the new location is already selected then toggle it
+            if (newIndex == self.selectedIndex()) {
+                self.selectedIndex(-1);
+            }
+            else {
+                self.selectedIndex(newIndex);
+            }       
+
+            
+            // notify the map view of the change
+            mapView.changeSelectedLocation(self.selectedIndex());
+            
+        };
+        
         // event handlers for window resize or orientation change to resize/recenter map
-        window.addEventListener('resize', function(e) {
+        window.addEventListener('resize', function() {
             // Make sure the map bounds get updated on page resize
             mapView.resizeRecenter();
         });
         
-        window.addEventListener('orientationchange', function(e) {
+        window.addEventListener('orientationchange', function() {
             // Make sure the map bounds get updated on page resize
             mapView.resizeRecenter();
         });
@@ -378,13 +406,5 @@ window.addEventListener('load', function() {
     ko.applyBindings(mapAppVM);
 
     // create the google map
-    mapView.init("mapDivId", locationData);
+    mapView.init("map-div", locationData);
 });
-
-
-
-
-
-
-
-

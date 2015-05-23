@@ -1,6 +1,7 @@
 readme.txt for Neighborhood App
 
 The Neighborhood App shows a google map of restaurants in the Alpharetta, GA area.
+Run index.html or visit the site hosted at github pages at: http://d99000706.github.io/UdacityFEWD_P5/
 The map markers can be clicked to view the restaurant's name and select that restaurant.
 Toggle the form view by clicking on the hamburger icon.
 In the form view you can:

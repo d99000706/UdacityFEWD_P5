@@ -5,115 +5,64 @@
 -->
 <html lang="en">
     <head>
-        <!--
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-        -->
         
         <meta name="viewport" content="width=device-width">
         <meta charset="UTF-8">
+        
         <title>Neighborhood Map</title>
         
-        <!--
-            inlined css styles for improved performance
         <link rel="stylesheet" href="css/style.css">
-        -->
-        
-        <style>
-            html, body {
-                height: 100%;
-                margin: 0px;
-                padding: 0px;
-                font-family: 'Trebuchet MS';
-                font-size: 14px;
-            }
-
-            #formBtnId {
-                position: fixed; 
-                z-index:903; 
-                left: 0; 
-                top: 0;
-            }
-
-            #formDivId {
-                height: 100%;
-                width: 0%;
-                float:left;
-                background-color: rgb(242, 242, 218);
-            }
-
-            #mapDivId {
-                height: 100%;
-                width: 100%;
-                float:right;
-            }
-
-            #listDivId {
-                max-height: 40%;
-                overflow: auto;
-            }
-
-            #filterDivId {
-                max-height: 20%;
-            }
-
-            #linksDivId {
-                overflow: auto;
-            }        
-        </style>
         
         <script async src="js/libs/jquery.min.js"></script>
         <script async src="js/libs/knockout-3.3.0.js"></script>
-
         <script async type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
     </head>
-    <body >
+    <body class='page-font'>
         <!--
             hamburger icon used as toggle button for the form view
         -->
-        <div id='formBtnId'>
+        <div class='form-btn'>
             <p data-bind='click: formToggleClickCB'>&#9776;
             </p>
         </div>
+ 
         <!--
-            div section for the form view
+            div for the form section
         -->
-        <div id="formDivId" data-bind="style:{ width: formWd()+'%'}">
-            <div id='listDivId'>
+        <div class="form-div">
+            <div class='list-div'>
                 <br>
-                <ul data-bind="foreach: locationList">
+                <ul class='pad-right' data-bind="foreach: locationList">
                     <li data-bind="click: $parent.locClickCB, text: $data.name, style:{color: $index() == $parent.selectedIndex() ? 'blue' : 'black', display: $data.visible() ? 'list-item' : 'none'}">
                     </li>
                 </ul>
             </div>
-            <div id='filterDivId'>
-                <input type = 'text' id='filterTxtId'> 
-                <button data-bind='click: filterClickCB'>Filter</button>
-                <button data-bind='click: resetClickCB'>Reset</button>
+            <div class='filter-div'>
+                <input type = 'text' class='page-font' id='filterTxtId'> 
+                <br>
+                <button class='page-font' data-bind='click: filterClickCB'>Filter</button>
+                <button class='page-font' data-bind='click: resetClickCB'>Reset</button>
             </div>
-            <div id='linksDivId'>
+            <div class='links-div'>
                 <p> related links: </p>
-                <ul id='linksListId' data-bind='foreach: linksList'>
+                <ul class='links-list pad-right' data-bind='foreach: linksList'>
                     <li >
                         <a data-bind='text: $data, attr:{href: $data, target: "_blank"}'>
                         </a>
                     </li>
                 </ul>
-                <p data-bind="style:{ display: ((linksList().length == 0) && (selectedIndex() >= 0)) ? 'inline' : 'none'} "> no additional links found  </p>
-               
+                <p data-bind="text: queryErrorMsg()"></p>                
             </div>
         </div>
+
         <!--
             div section for the map view
         -->
-        <div id="mapDivId" data-bind="style:{ width: (100 - formWd())+'%'}">
-        </div>
+        <div class="map-div" >
+        </div>       
 
-
-       
-
-    </body>
-    
+    </body>   
         
 </html>
